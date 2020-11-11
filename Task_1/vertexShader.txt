@@ -1,0 +1,38 @@
+
+attribute vec3 aVertexPosition;
+attribute vec4 aVertexColor;
+ 
+
+uniform mat4 uMVMatrix;
+uniform mat4 uPMatrix;
+ 
+varying vec4 vColor;
+ 
+
+uniform float f; // this is incremented every frame
+uniform float t; // this is time in milliseconds since epoch
+
+void main(void) { 
+
+mat4  rotation = mat4(
+    vec4( cos(f/100.0), -sin(f/100.0), 0.0,  0.0 ),
+    vec4( sin(f/100.0), cos(f/100.0),  0.0,  0.0 ),
+    vec4( 0.0,        0.0,         1.0,  0.0 ),
+    vec4( 0.0,        0.0,         0.0,  1.0 ) );
+
+    gl_Position = uPMatrix * uMVMatrix  * vec4(aVertexPosition, 1.0) * rotation ;
+
+ vec4 shape = vec4(aVertexPosition, 1.0) - vec4(cos(f/15.0)- 
+      sin(f/15.0),cos(f/15.0)+sin(f/15.0), 0.0,0.0);
+ float sqrX = shape.x * shape.x;
+ float sqrY = shape.y * shape.y;    
+ 
+ if(sqrX + sqrY <= 0.1 )
+ {
+   vColor = vec4(0.0,1.0,0.0,0.5);
+ }
+ else
+ {
+   vColor = aVertexColor;
+ }
+}
